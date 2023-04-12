@@ -130,6 +130,7 @@ class MapBuilder:
             print("Including Weights")
             the_map, the_bins = np.histogramdd(sample=self._data, bins=binning_scheme, weights=self.weights)
         else :
+            print("Not including Weights. self._data.shape: ", self._data.shape)
             the_map, the_bins = np.histogramdd(sample=self._data, bins=binning_scheme)
         
         with h5py.File(file_name, "w") as h5w:
