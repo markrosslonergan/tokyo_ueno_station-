@@ -34,26 +34,26 @@ class MasterTools:
         self.loadMasterDFs()
 
     def loadMasterFinal(self):
-        gLEE_dfD_fin = loadgLEE(self.datadir+"/sbnfit_DarkNu_MultiTop_v4_0_stage_1_DarkNu_KeystoneBenchD_NoHF_TextGen.root")
-        gLEE_dfA_fin = loadgLEE(self.datadir+"/sbnfit_DarkNu_MultiTop_v4_0_stage_1_DarkNu_KeystoneBenchAp_NoHF_TextGen.root")
-        gLEE_dfC_fin = loadgLEE(self.datadir+"/sbnfit_DarkNu_MultiTop_v4_0_stage_1_DarkNu_KeystoneBenchC_NoHF_TextGen.root")
-        gLEE_dfB_fin = loadgLEE(self.datadir+"/sbnfit_DarkNu_MultiTop_v4_0_stage_1_DarkNu_KeystoneBenchBp_NoHF_TextGen.root")
+        gLEE_dfD_fin = loadgLEE(self.datadir+"/sbnfit_files/sbnfit_MultiTop_v5_0_stage_1_DarkNu_KeystoneBenchD_NoHF_TextGen.root")
+        gLEE_dfA_fin = loadgLEE(self.datadir+"/sbnfit_files/sbnfit_MultiTop_v5_0_stage_1_DarkNu_KeystoneBenchAp_NoHF_TextGen.root")
+        gLEE_dfC_fin = loadgLEE(self.datadir+"/sbnfit_files/sbnfit_MultiTop_v5_0_stage_1_DarkNu_KeystoneBenchC_NoHF_TextGen.root")
+        gLEE_dfB_fin = loadgLEE(self.datadir+"/sbnfit_files/sbnfit_MultiTop_v5_0_stage_1_DarkNu_KeystoneBenchBp_NoHF_TextGen.root")
         self.masterFinal = pd.concat([gLEE_dfA_fin,gLEE_dfB_fin,gLEE_dfC_fin,gLEE_dfD_fin])
 
     def loadMasterOrig(self):
-        gLEE_dfD_vert = loadgLEE_Bare(self.datadir+"/vertex_DarkNu_Run1_Keystone_BenchD_noHF_v50.0.root")
-        gLEE_dfA_vert = loadgLEE_Bare(self.datadir+"/vertex_DarkNu_Run1_Keystone_BenchAp_noHF_v50.0.root")
-        gLEE_dfC_vert = loadgLEE_Bare(self.datadir+"/vertex_DarkNu_Run1_Keystone_BenchC_noHF_v50.0.root")
-        gLEE_dfB_vert = loadgLEE_Bare(self.datadir+"/vertex_DarkNu_Run1_Keystone_BenchBp_noHF_v50.0.root")
+        gLEE_dfD_vert = loadgLEE_Bare(self.datadir+"/sbnfit_files/vertex_DarkNu_Run1_Keystone_BenchD_noHF_v50.0.root")
+        gLEE_dfA_vert = loadgLEE_Bare(self.datadir+"/sbnfit_files/vertex_DarkNu_Run1_Keystone_BenchAp_noHF_v50.0.root")
+        gLEE_dfC_vert = loadgLEE_Bare(self.datadir+"/sbnfit_files/vertex_DarkNu_Run1_Keystone_BenchC_noHF_v50.0.root")
+        gLEE_dfB_vert = loadgLEE_Bare(self.datadir+"/sbnfit_files/vertex_DarkNu_Run1_Keystone_BenchBp_noHF_v50.0.root")
         self.BP_orig = [gLEE_dfA_vert.shape[0],gLEE_dfB_vert.shape[0],gLEE_dfC_vert.shape[0],gLEE_dfD_vert.shape[0]]
         self.masterOrig = pd.concat([gLEE_dfA_vert,gLEE_dfB_vert,gLEE_dfC_vert,gLEE_dfD_vert])
          
     
     def loadMasterDFs(self):
-        self.df_A = pd.read_pickle("/home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0_mzprime_0.03_dirac/pandas_df.pckl")
-        self.df_B = pd.read_pickle("/home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0_mzprime_1.25_dirac/pandas_df.pckl")
-        self.df_C = pd.read_pickle("/home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0.107_mzprime_0.03_dirac/pandas_df.pckl")
-        self.df_D = pd.read_pickle("/home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0.107_mzprime_1.25_dirac/pandas_df.pckl")        
+        self.df_A = pd.read_pickle(self.datadir+"/master_maps/pandas_BPA_v1_lowerstats.pckl")
+        self.df_B = pd.read_pickle(self.datadir+"/master_maps/pandas_BPB_v1_lowerstats.pckl")
+        self.df_C = pd.read_pickle(self.datadir+"/master_maps/pandas_BPC_v1_lowerstats.pckl")
+        self.df_D = pd.read_pickle(self.datadir+"/master_maps/pandas_BPD_v1_lowerstats.pckl")        
         BPA_corr_factor = self.df_A.shape[0]/self.BP_orig[0]
         BPB_corr_factor = self.df_B.shape[0]/self.BP_orig[1]
         BPC_corr_factor = self.df_C.shape[0]/self.BP_orig[2]

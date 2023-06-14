@@ -1,5 +1,7 @@
 # tokyo_ueno_station-
 
+TODO:
+Make is so reweight can run over a precalculated STAGE i.e stage 5
 
 
 

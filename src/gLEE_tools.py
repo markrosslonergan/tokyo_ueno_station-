@@ -36,9 +36,9 @@ def loadgLEE(filename):
     #ary2 = simple.arrays(["pass_selection"],aliases={"pass_selection": "(simple_DarkNu_MultiTop_v2.5COSMIC_mva > 0.994)*(simple_DarkNu_MultiTop_v2.5Nue_mva > 0.983 )*(simple_DarkNu_MultiTop_v2_5BNB_mva > 0.987 )*(simple_DarkNu_MultiTop_v2_5NCPi0_mva > 0.8377) "}, library="pd")
     #Try this instead
     
-    ary2 = simple.arrays(['simple_weight','simple_pot_weight','simple_DarkNu_MultiTop_v4_0COSMIC_mva','simple_DarkNu_MultiTop_v4_0Nue_mva','simple_DarkNu_MultiTop_v4_0BNB_mva','simple_DarkNu_MultiTop_v4_0NCPi0_mva'], library="pd")
+    ary2 = simple.arrays(['simple_weight','simple_pot_weight','simple_MultiTop_v5_0COSMIC_mva','simple_MultiTop_v5_0Nue_mva','simple_MultiTop_v5_0BNB_mva','simple_MultiTop_v5_0NCPi0_mva'], library="pd")
     ary2.columns = ary2.columns.str.replace(".","_", regex=False)
-    ary2['pass_selection'] = ary2.apply(lambda row: (row['simple_DarkNu_MultiTop_v4_0COSMIC_mva']>0.994)*(row['simple_DarkNu_MultiTop_v4_0Nue_mva']>0.983)*(row['simple_DarkNu_MultiTop_v4_0BNB_mva']>0.987)*(row['simple_DarkNu_MultiTop_v4_0NCPi0_mva']>0.8377), axis=1)
+    ary2['pass_selection'] = ary2.apply(lambda row: (row['simple_MultiTop_v5_0COSMIC_mva']>0.994)*(row['simple_MultiTop_v5_0Nue_mva']>0.983)*(row['simple_MultiTop_v5_0BNB_mva']>0.987)*(row['simple_MultiTop_v5_0NCPi0_mva']>0.8377), axis=1)
      
     df = pd.concat([ary1, ary2], axis=1)
     df.fillna(0,inplace=True)
