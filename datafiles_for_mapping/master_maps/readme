@@ -8,3 +8,13 @@ self.df_D = pd.read_pickle("/home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/M
 10031  cp /home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0_mzprime_1.25_dirac/pandas_df.pckl pandas_BPB_v1_lowerstats.pckl 
 10033  cp /home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0.107_mzprime_0.03_dirac/pandas_df.pckl pandas_BPC_v1_lowerstats.pckl 
 10036  cp /home/mark/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0.107_mzprime_1.25_dirac/pandas_df.pckl pandas_BPD_v1_lowerstats.pckl 
+
+
+High stats from 
+~/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/KeyStone_HighStats_ForMap/data/microboone_active_tpc_benchmark/3plus2
+
+
+10125  cp ~/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/KeyStone_HighStats_ForMap/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0_mzprime_0.03_dirac/pandas_df.pckl pandas_BPA_v1_1mil.pckl
+10126  cp ~/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/KeyStone_HighStats_ForMap/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0_mzprime_1.25_dirac/pandas_df.pckl pandas_BPB_v1_1mil.pckl
+10127  cp ~/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/KeyStone_HighStats_ForMap/data/microboone_active_tpc_benchmark/3plus2//m5_0.15_m4_0.107_mzprime_0.03_dirac/pandas_df.pckl pandas_BPC_v1_1mil.pckl
+10128  cp ~/work/DarkNu_Codebase_Nov2021/workin_dir/Map_Develop/microboone_study/FilteredMapGeneration/KeyStone_HighStats_ForMap/data/microboone_active_tpc_benchmark/3plus2/m5_0.15_m4_0.107_mzprime_1.25_dirac/pandas_df.pckl pandas_BPD_v1_1mil.pckl

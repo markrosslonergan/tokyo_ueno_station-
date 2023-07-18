@@ -56,8 +56,10 @@ class MapBuilder:
         self.energy_e_plus = self._get_energy("P_decay_ell_plus")
         self.energy_e_minus = self._get_energy("P_decay_ell_minus")
         self.energy_sum = self.energy_e_plus + self.energy_e_minus
+        self.energy_asym  = np.absolute(self.energy_e_plus-self.energy_e_minus)/self.energy_sum
         self.delta_theta = self._get_opening_angle()
         self.weights = self._get_p_4v("w_event_rate")
+        self.theta_sum = self._get_theta_sum()
         self.pos_decay_z = self._get_pos_decay_z("pos_decay")
         _, _, self.pz_p_e_plus = self._get_pi_over_p("P_decay_ell_plus")
         _, _, self.pz_p_e_minus = self._get_pi_over_p("P_decay_ell_minus")
@@ -66,15 +68,16 @@ class MapBuilder:
         self._data = np.vstack((
             self.energy_e_minus,
             self.energy_sum,
+            self.energy_asym,
             self.delta_theta,
             self.pz_p_e_plus,
             self.pz_p_e_minus,
-            self.phi_e_minus,
+            #self.phi_e_minus, #replace phi with theta sum for now
+            self.theta_sum,
             self.pos_decay_z
         )).T
     def _get_pos_decay_z(self, entry):
-        return self._dataframe[(entry, "3")].values
-   
+        return self._dataframe[(entry, "3")].values       
     
     def _get_energy(self, entry):
         return self._dataframe[(entry, "0")].values
@@ -110,6 +113,14 @@ class MapBuilder:
     def _get_pi_over_p(self, entry):
         p_4v = self._get_p_4v(entry)
         return Cfv.get_3direction(p_4v).T
+    
+    def _get_theta_sum(self):
+        p1 = self._get_p_4v("P_decay_ell_plus")
+        p2 = self._get_p_4v("P_decay_ell_minus")
+        psum = p1+p2
+        ans = Cfv.get_3direction(psum)
+        return np.arccos(ans[:,2])*180.0/3.14159
+
 
         the_map, the_bins = np.histogramdd(sample=self._data, bins=binning_scheme, weights=self.weights)
     def build(self, binning_scheme, file_name, use_weights=True):
@@ -137,7 +148,8 @@ class MapBuilder:
             h5w.attrs["version"] = "MapBuilder_FromDF_v0.1.0"
             #h5w.attrs["GenLauncher_param_file"] = self._param_file
             h5w.attrs["GenLauncher_neval"] = self._neval
-            h5w.attrs["observables"] = ["energy_e_minus", "energy_sum", "delta_theta", "pz_p_e_plus", "pz_p_e_minus", "phi_e_minus","pos_decay_z"]
+            #h5w.attrs["observables"] = ["energy_e_minus", "energy_sum", "energy_asym","delta_theta", "pz_p_e_plus", "pz_p_e_minus", "phi_e_minus","pos_decay_z"]
+            h5w.attrs["observables"] = ["energy_e_minus", "energy_sum", "energy_asym","delta_theta", "pz_p_e_plus", "pz_p_e_minus", "theta_sum","pos_decay_z"]
             for i, attr in enumerate(h5w.attrs["observables"]):
                 h5w.attrs[attr] = the_bins[i]
             h5w.create_dataset("map", the_map.shape, dtype="f", data=the_map)

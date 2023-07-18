@@ -25,7 +25,7 @@ class MasterTools:
     def __init__(self,indir,tag):
         self.datadir = indir
         self.tag = tag
-        self.names = [self.tag+"_BPA",self.tag+"_BPD",self.tag+"_BPC",self.tag+"_BPD"]
+        self.names = [self.tag+"_BPA",self.tag+"_BPB",self.tag+"_BPC",self.tag+"_BPD"]
         print("Loading Master Oriringal files @ ", self.datadir)
         self.loadMasterFinal()
         print("Loading Master Original FIles @ ", self.datadir)
@@ -50,14 +50,21 @@ class MasterTools:
          
     
     def loadMasterDFs(self):
-        self.df_A = pd.read_pickle(self.datadir+"/master_maps/pandas_BPA_v1_lowerstats.pckl")
-        self.df_B = pd.read_pickle(self.datadir+"/master_maps/pandas_BPB_v1_lowerstats.pckl")
-        self.df_C = pd.read_pickle(self.datadir+"/master_maps/pandas_BPC_v1_lowerstats.pckl")
-        self.df_D = pd.read_pickle(self.datadir+"/master_maps/pandas_BPD_v1_lowerstats.pckl")        
-        BPA_corr_factor = self.df_A.shape[0]/self.BP_orig[0]
-        BPB_corr_factor = self.df_B.shape[0]/self.BP_orig[1]
-        BPC_corr_factor = self.df_C.shape[0]/self.BP_orig[2]
-        BPD_corr_factor = self.df_D.shape[0]/self.BP_orig[3]
+        self.df_A = pd.read_pickle(self.datadir+"/master_maps/pandas_BPA_v1_1mil.pckl")
+        self.df_B = pd.read_pickle(self.datadir+"/master_maps/pandas_BPB_v1_1mil.pckl")
+        self.df_C = pd.read_pickle(self.datadir+"/master_maps/pandas_BPC_v1_1mil.pckl")
+        self.df_D = pd.read_pickle(self.datadir+"/master_maps/pandas_BPD_v1_1mil.pckl")        
+     
+        self.df_A_low = pd.read_pickle(self.datadir+"/master_maps/pandas_BPA_v1_lowerstats.pckl")
+        self.df_B_low = pd.read_pickle(self.datadir+"/master_maps/pandas_BPB_v1_lowerstats.pckl")
+        self.df_C_low = pd.read_pickle(self.datadir+"/master_maps/pandas_BPC_v1_lowerstats.pckl")
+        self.df_D_low = pd.read_pickle(self.datadir+"/master_maps/pandas_BPD_v1_lowerstats.pckl")        
+
+     
+        BPA_corr_factor = self.df_A_low.shape[0]/self.BP_orig[0]
+        BPB_corr_factor = self.df_B_low.shape[0]/self.BP_orig[1]
+        BPC_corr_factor = self.df_C_low.shape[0]/self.BP_orig[2]
+        BPD_corr_factor = self.df_D_low.shape[0]/self.BP_orig[3]
         print("benchmark correction factors are: ", BPA_corr_factor,BPB_corr_factor,BPC_corr_factor,BPD_corr_factor)
         self.BP_corr = [BPA_corr_factor,BPB_corr_factor,BPC_corr_factor,BPD_corr_factor]
 
@@ -73,8 +80,14 @@ class MasterTools:
             print("run()")
             mapB.run()
             print("build hdf5")
-            mapB.build(binning_scheme=input_binning_scheme, file_name=outputname, use_weights=False)
+            mapB.build(binning_scheme=input_binning_scheme, file_name=outputname, use_weights=True)
             print("Done on ",name)
+
+    def closeMasterMap(self):
+            self.map_A.close()
+            self.map_B.close()
+            self.map_C.close()
+            self.map_D.close()
 
     def loadMasterMap(self,dir):
             print("loading master maps from ", dir)
@@ -87,7 +100,7 @@ class MasterTools:
     def reweight(self,targetMap,weightName):
         print("Starting to reweight master map to target, weight name ",weightName)
         start = time.time()
-        self.masterFinal[weightName] = self.masterFinal.apply(lambda x: getMasterWeight(self.map_A,self.map_B,self.map_C,self.map_D, targetMap, np.array([x['true_energy_e_minus'], x['true_energy_sum'], x['true_delta_theta'], x['true_pz_p_e_plus'],x['true_pz_p_e_minus'], x['true_phi_e_minus']]), self.BP_corr) , axis=1);
+        self.masterFinal[weightName] = self.masterFinal.apply(lambda x: getMasterWeight(self.map_A,self.map_B,self.map_C,self.map_D, targetMap, np.array([x['true_energy_e_minus'], x['true_energy_sum'],x['true_energy_asym'], x['true_delta_theta'], x['true_pz_p_e_plus'],x['true_pz_p_e_minus'], x['true_theta_sum'],x['true_pos_decay_z']]), self.BP_corr) , axis=1);
         end = time.time()
         print("Apply the map took ", end - start)
         print('Some (possibly useful) info')

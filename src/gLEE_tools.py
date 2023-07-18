@@ -11,7 +11,7 @@ def loadgLEE(filename):
     vertex = file["singlephoton/vertex_tree"]
     simple = file["singlephoton/simple_tree"]
     #grab pandas dataframes of useful info only, alias a few things for simplicity
-    ary1 = vertex.arrays(["reco_asso_showers","reco_asso_tracks","m_flash_optfltr_pe_beam","m_flash_optfltr_pe_veto","reco_vertex_x", "reco_vertex_y", "reco_vertex_z","true_vertex_x","true_vertex_y","true_vertex_z", "reco_primary_shower_energy","reco_secondary_shower_energy","reco_track_energy","true_energy_e_minus","true_energy_sum","true_mom_e_plus","true_mom_e_minus","true_delta_theta","true_pz_p_e_plus","true_pz_p_e_minus","true_phi_e_minus","true_pos_decay_z"], 
+    ary1 = vertex.arrays(["reco_asso_showers","reco_asso_tracks","m_flash_optfltr_pe_beam","m_flash_optfltr_pe_veto","reco_vertex_x", "reco_vertex_y", "reco_vertex_z","true_vertex_x","true_vertex_y","true_vertex_z", "reco_primary_shower_energy","reco_secondary_shower_energy","reco_track_energy","true_energy_e_minus","true_energy_sum","true_energy_asym","true_mom_e_plus","true_mom_e_minus","true_delta_theta","true_pz_p_e_plus","true_pz_p_e_minus","true_phi_e_minus","true_pos_decay_z","true_weight","true_theta_sum"], 
                   aliases={"true_vertex_x": "mctruth_daughters_startx[:,5]",
                            "true_vertex_y":"mctruth_daughters_starty[:,5]",
                            "true_vertex_z":"mctruth_daughters_startz[:,5]",
@@ -22,14 +22,17 @@ def loadgLEE(filename):
                            "true_energy_e_minus" : "mctruth_daughters_E[:,5]",
                            "true_energy_e_plus" : "mctruth_daughters_E[:,6]",
                            "true_energy_sum" : "(mctruth_daughters_E[:,5]+mctruth_daughters_E[:,6])",
+                           "true_energy_asym" : "fabs(true_energy_e_minus-true_energy_e_plus)/true_energy_sum",
                            "true_mom_e_minus" : "sqrt(mctruth_daughters_px[:,5]*mctruth_daughters_px[:,5]+mctruth_daughters_py[:,5]*mctruth_daughters_py[:,5]+mctruth_daughters_pz[:,5]*mctruth_daughters_pz[:,5])",
                            "true_mom_e_plus" : "sqrt(mctruth_daughters_px[:,6]*mctruth_daughters_px[:,6]+mctruth_daughters_py[:,6]*mctruth_daughters_py[:,6]+mctruth_daughters_pz[:,6]*mctruth_daughters_pz[:,6])",
                            "true_delta_theta" : "acos((mctruth_daughters_px[:,5]*mctruth_daughters_px[:,6]+mctruth_daughters_py[:,5]*mctruth_daughters_py[:,6]+mctruth_daughters_pz[:,5]*mctruth_daughters_pz[:,6])/(true_mom_e_minus*true_mom_e_plus))/3.14159*180.",
                            "true_pz_p_e_minus" : "mctruth_daughters_pz[:,5]/true_mom_e_minus",
                            "true_pz_p_e_plus" : "mctruth_daughters_pz[:,6]/true_mom_e_plus",
+                           "true_theta_sum" :  "acos((mctruth_daughters_pz[:,5]+mctruth_daughters_pz[:,6])/(true_mom_e_minus+true_mom_e_plus))/3.14159*180.0",
                            "true_phi_e_minus" : "atan2(mctruth_daughters_py[:,5],mctruth_daughters_px[:,5])/3.14159*180.0", 
                            "true_phi_e_plus" : "atan2(mctruth_daughters_py[:,6],mctruth_daughters_px[:,6])/3.14159*180.0",
-                           "true_pos_decay_z" : "mctruth_daughters_startz[:,5]-518.4" }, library="pd")
+                           "true_pos_decay_z" : "mctruth_daughters_startz[:,5]-518.4",
+                           "true_weight" : "textgen_info[:,0]"}, library="pd")
 
     #grab the BDT score pass/fail
     #First one seems to break with periods in the name, hmm
@@ -59,7 +62,7 @@ def loadgLEE_Bare(filename):
     file = up.open(filename)
     vertex = file["singlephotonana/vertex_tree"]
     #grab pandas dataframes of useful info only, alias a few things for simplicity
-    ary1 = vertex.arrays(["true_vertex_x","true_vertex_y","true_vertex_z", "true_energy_e_minus","true_energy_sum","true_mom_e_plus","true_mom_e_minus","true_delta_theta","true_pz_p_e_plus","true_pz_p_e_minus","true_phi_e_minus","textgen_weight","true_pos_decay_z"], 
+    ary1 = vertex.arrays(["true_vertex_x","true_vertex_y","true_vertex_z", "true_energy_e_minus","true_energy_sum","true_energy_asym","true_mom_e_plus","true_mom_e_minus","true_delta_theta","true_pz_p_e_plus","true_pz_p_e_minus","true_phi_e_minus","textgen_weight","true_pos_decay_z","true_theta_sum"], 
                   aliases={"true_vertex_x": "mctruth_daughters_startx[:,5]",
                            "true_vertex_y":"mctruth_daughters_starty[:,5]",
                            "true_vertex_z":"mctruth_daughters_startz[:,5]",
@@ -67,11 +70,13 @@ def loadgLEE_Bare(filename):
                            "true_energy_e_minus" : "mctruth_daughters_E[:,5]",
                            "true_energy_e_plus" : "mctruth_daughters_E[:,6]",
                            "true_energy_sum" : "(mctruth_daughters_E[:,5]+mctruth_daughters_E[:,6])",
+                           "true_energy_asym" : "fabs(true_energy_e_minus-true_energy_e_plus)/true_energy_sum",
                            "true_mom_e_minus" : "sqrt(mctruth_daughters_px[:,5]*mctruth_daughters_px[:,5]+mctruth_daughters_py[:,5]*mctruth_daughters_py[:,5]+mctruth_daughters_pz[:,5]*mctruth_daughters_pz[:,5])",
                            "true_mom_e_plus" : "sqrt(mctruth_daughters_px[:,6]*mctruth_daughters_px[:,6]+mctruth_daughters_py[:,6]*mctruth_daughters_py[:,6]+mctruth_daughters_pz[:,6]*mctruth_daughters_pz[:,6])",
                            "true_delta_theta" : "acos((mctruth_daughters_px[:,5]*mctruth_daughters_px[:,6]+mctruth_daughters_py[:,5]*mctruth_daughters_py[:,6]+mctruth_daughters_pz[:,5]*mctruth_daughters_pz[:,6])/(true_mom_e_minus*true_mom_e_plus))/3.14159*180.",
                            "true_pz_p_e_minus" : "mctruth_daughters_pz[:,5]/true_mom_e_minus",
                            "true_pz_p_e_plus" : "mctruth_daughters_pz[:,6]/true_mom_e_plus",
+                           "true_theta_sum" :  "acos((mctruth_daughters_pz[:,5]+mctruth_daughters_pz[:,6])/(true_mom_e_minus+true_mom_e_plus))/3.14159*180.0",
                            "true_phi_e_minus" : "atan2(mctruth_daughters_py[:,5],mctruth_daughters_px[:,5])/3.14159*180.0", 
                            "true_phi_e_plus" : "atan2(mctruth_daughters_py[:,6],mctruth_daughters_px[:,6])/3.14159*180.0" ,
                            "textgen_weight" : "textgen_info[:,0]" ,
@@ -113,7 +118,7 @@ def getWeight(bp_mapBench,bp_mapTarget,input_values):
 def getMasterWeight(map_Ap, map_Bp, map_C, map_D, bp_mapTarget,input_values,map_corr) :
    
     binlist = np.zeros(bp_mapTarget.attrs["observables"].size,dtype=int)
-    
+   
     for obs,val,index in zip(bp_mapTarget.attrs["observables"],input_values, enumerate(binlist)) :
         #searchsorted returns -1 if below, and will return size+1 above, 
         #can assume binning is always sorted?
@@ -127,14 +132,14 @@ def getMasterWeight(map_Ap, map_Bp, map_C, map_D, bp_mapTarget,input_values,map_
     valid = (binlist >=0).all()
     
     if valid:
-        #print(bp_mapBench["map"][binlist])
-        valA = map_Ap["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6]]/map_corr[0]
-        valB = map_Bp["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6]]/map_corr[1]
-        valC = map_C["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6]]/map_corr[2]
-        valD = map_D["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6]]/map_corr[3]
+        #
+        valA = map_Ap["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6],binlist[7]]/map_corr[0]
+        valB = map_Bp["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6],binlist[7]]/map_corr[1]
+        valC = map_C["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6],binlist[7]]/map_corr[2]
+        valD = map_D["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6],binlist[7]]/map_corr[3]
         valBench = valA+valB+valD+valC
         
-        valTarget =bp_mapTarget["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6]]
+        valTarget =bp_mapTarget["map"][binlist[0],binlist[1],binlist[2],binlist[3],binlist[4],binlist[5],binlist[6],binlist[7]]
         return valTarget/valBench if valBench!=0 else  0 # -1e-10
 
     else :
